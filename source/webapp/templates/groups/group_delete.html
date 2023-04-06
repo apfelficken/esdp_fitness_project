@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 class="text-center fs-1 m-3 p-3">Вы действительно хотите удалить "{{ group.name }}"?</h1>
+    <form method="POST" action="{% url 'webapp:group_delete' group.pk %}" class="text-center">
+        {% csrf_token %}
+        <button type="submit" class="sbmt_btn">Да</button>
+        <a class="sbmt_btn" href="{% url 'webapp:group_detail' group.pk%}" role="button">Отмена</a>
+    </form>
+{% endblock %}
+

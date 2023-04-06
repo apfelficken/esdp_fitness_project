@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 class="card-title text-center m-3 p-3">Группы</h1>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Название</th>
+            <th scope="col">Время начала занятий</th>
+            <th scope="col">Тренер</th>
+            <th scope="col">Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for group in groups %}
+            <tr>
+                <th><a href="{% url 'webapp:group_detail' group.pk %}">{{ group.name }}</a></th>
+                <td>{{ group.start_at|time:'H:i'  }}</td>
+                {% if group.coach %}
+                    <td>{{ group.coach }}</td>
+                {% else %}
+                    <td>Не назначен</td>
+                {% endif %}
+                <td>
+                <a class="mx-3" href="{% url 'webapp:group_update' group.pk %}"><i class="bi bi-pencil"></i></a>
+                <a href="{% url 'webapp:group_delete' group.pk %}">
+                    <i class="bi bi-trash3-fill"></i>
+                </a>
+            </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% if is_paginated %}
+    {% include 'partial/pagination.html' %}
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,4 @@
+<form action = "{% url 'webapp:training_create' client.pk %}" method = "post">
+    {% csrf_token %}
+    <button class="nav_btn my-2">Добавить тренировку</button>
+</form>

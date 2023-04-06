@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block nav %}
+{% endblock %}
+
+{% block content %}
+    <h2 class="card-title text-center m-3 p-3">Список тренеров</h2>
+
+    <form class="mb-3" action="" method="GET">
+        {% include 'partial/form.html' with button_text="Применить" %}
+    </form>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Имя</th>
+            <th scope="col">Фамилия</th>
+            <th scope="col">Telegram</th>
+            <th scope="col">Номер</th>
+            <th scope="col">Приступил к работе</th>
+            <th scope="col">Количество занятий</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for coach in coaches %}
+            <tr>
+                <td><a href="{% url 'webapp:coach_detail' coach.pk %}">{{ coach.first_name }}</a></td>
+                {% if coach.last_name %}
+                    <td>{{ coach.last_name }}</td>
+                {% else %}
+                    <td>--</td>
+                {% endif %}
+                <td>{{ coach.telegram_name }}</td>
+                {% if coach.phone %}
+                    <td>{{ coach.phone }}</td>
+                {% else %}
+                    <td>--</td>
+                {% endif %}
+                <td>{{ coach.started_to_work|date:"d M Y" }}</td>
+                {% if coach.quantity %}
+                    <td>{{ coach.quantity }}</td>
+                {% else %}
+                    <td>0</td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% if is_paginated %}
+        {% include 'partial/pagination.html' %}
+    {% endif %}
+{% endblock %}
+
+
+
+
+
+

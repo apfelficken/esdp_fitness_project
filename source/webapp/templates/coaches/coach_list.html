@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block nav %}
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="{% url 'webapp:coach_create' %}">
+            Добавить тренера(+)
+        </a>
+    </li>
+    <li>
+        <a class="nav-link active" aria-current="page" href="{% url 'webapp:coach_statistics' %}">
+            Статистика тренеров
+        </a>
+    </li>
+
+{% endblock %}
+
+{% block content %}
+    <h2 class="card-title text-center m-3 p-3">Список тренеров</h2>
+     <table class="table w-100 table-striped" style="table-layout: auto;">
+        <thead>
+        <tr>
+            <th scope="col">Имя</th>
+            <th scope="col">Фамилия</th>
+            <th scope="col">Telegram</th>
+            <th scope="col">Номер</th>
+            <th scope="col">Количество занятий</th>
+            <th scope="col">Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for coach in coaches %}
+            <tr>
+                <td><a href="{% url 'webapp:coach_detail' coach.pk %}">{{ coach.first_name }}</a></td>
+                {% if coach.last_name %}
+                    <td>{{ coach.last_name }}</td>
+                {% else %}
+                    <td>--</td>
+                {% endif %}
+                <td>{{ coach.telegram_name }}</td>
+                {% if coach.phone %}
+                    <td>{{ coach.phone }}</td>
+                {% else %}
+                    <td>--</td>
+                {% endif %}
+                {% if coach.quantity %}
+                    <td>{{ coach.quantity }}</td>
+                {% else %}
+                    <td>0</td>
+                {% endif %}
+                <td><a href="{% url 'webapp:coach_update' coach.pk %}"><i class="bi bi-pencil m-4"></i></a>
+                <a href="{% url 'webapp:coach_delete' coach.pk %}"><i class="bi bi-trash3-fill m-3"></i></a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% if is_paginated %}
+    {% include 'partial/pagination.html' %}
+    {% endif %}
+{% endblock %}

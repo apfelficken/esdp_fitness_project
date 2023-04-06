@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block topbar %}
+
+    {% if client.payment_end_date %}
+        {% now "Y-m-d" as todays_date %}
+        {% if todays_date < client.payment_end_date|date:"Y-m-d" %}
+            <li class="nav-item">
+                {% include 'trainings/training_create.html' %}
+            </li>
+        {% endif %}
+    {% endif %}
+    <li class="nav-item">
+        <a class="nav_btn my-2" aria-current="page" href="{% url 'webapp:payment_create' client.pk %}">
+            Добавить новый платёж
+        </a>
+    </li>
+{% endblock %}
+
+{% block content %}
+    <div class="card m-5">
+        <div class="row no-gutters">
+            <div class="col-md-4">
+              {% if client.photo %}
+                <div class="col-md-16">
+                    <img src="{{ client.photo.url }}" class="card-img">
+                </div>
+              {% else %}
+                <div class="col-md-16">
+                    <img src="{% static "images/no_photo.jpg" %}" class="card-img">
+                </div>
+              {% endif %}
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h4 class="card-title d-flex align-items-center">
+                        {% if not client.first_name %}
+                           <span class="text-success">Новый клиент</span>
+                        {% else %}
+                            Имя: {{ client.first_name }}
+                        {% endif %}
+                            <p class="card-text ml-auto">
+                                <a href="{% url 'webapp:client_update' client.pk %}" class="cng_btn"><i class="bi bi-pencil"></i></a>
+                                <a href="{% url 'webapp:client_delete' client.pk %}" class="cng_btn ml-3"><i class="bi bi-trash3-fill"></i></a>
+                            </p>
+
+                    </h4>
+                    <div class="ms-auto">
+
+                    </div>
+                    {% if not client.last_name %}
+                        <p class="card-text">Фамилия: --</p>
+                    {% else %}
+                        <p class="card-text">Фамилия: {{ client.last_name }}</p>
+                    {% endif %}
+                    {% if not client.group %}
+                        <p class="card-text">Группа: --</p>
+                    {% else %}
+                        <p class="card-text">Группа: <a href="{% url 'webapp:group_detail' client.group.pk %}">{{ client.group.name }}</a></p>
+                    {% endif %}
+                    <p class="card-text">Telegram: {{ client.telegram_name }}</p>
+                    {% if not client.email %}
+                        <p class="card-text">Почта: --</p>
+                    {% else %}
+                        <p class="card-text">Почта: {{ client.email }}</p>
+                    {% endif %}
+                    {% if not client.phone %}
+                        <p class="card-text">Телефон: --</p>
+                    {% else %}
+                        <p class="card-text">Телефон: {{ client.phone }}</p>
+                    {% endif %}
+
+                    {% if not client.region %}
+                        <p class="card-text">Регион: --</p>
+                    {% else %}
+                        <p class="card-text">Регион: {{ client.region }}</p>
+                    {% endif %}
+                    <p class="card-text">Количество посещений: {{ client.visit_count }}</p>
+                    {% if not client.comment %}
+                        <p class="card-text">Комментарий: --</p>
+                    {% else %}
+                        <p class="card-text">Комментарий: {{ client.comment }}</p>
+                    {% endif %}
+                    <p class="card-text">Дата добавления: {{ client.created_at|date:"d M Y" }}</p>
+                    {% if client.payment_end_date %}
+                        <p class="card-text">Дата окончания оплаты: {{ client.payment_end_date|date:"d M Y" }}</p>
+                    {% else %}
+                        <p class="card-text">--</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {% if form %}
+        <form action="{% url 'webapp:client_group_update' client.pk %}" method="POST">
+             {% include 'partial/form.html' with button_text="Добавить" %}
+        </form>
+    {% endif %}
+
+    {% for payment in payments %}
+        <div class="card m-3">
+            <div class="card-body">
+                <h3 class="card-title">Платёж:
+                    <a href="{% url 'webapp:payment_update' payment.pk %}" class="cng_btn ml-4"><i class="bi bi-pencil"></i></a>
+                    <a href="{% url 'webapp:payment_delete' payment.pk %}" class="cng_btn ml-3"><i class="bi bi-trash3-fill"></i></a>
+                </h3>
+                <p class="card-text">Сумма оплаты: {{ payment.amount }} </p>
+                <p class="card-text">Время оплаты: {{ payment.paid_at|date:"d M Y" }}</p>
+            </div>
+        </div>
+        {% if is_paginated %}
+        {% include 'partial/pagination.html' %}
+        {% endif %}
+    {% empty %}
+        <p>У этого клиента нет платежей.</p>
+    {% endfor %}
+
+{% endblock %}

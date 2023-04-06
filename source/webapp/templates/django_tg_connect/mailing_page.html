@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 class="text-center m-3">Рассылка: </h1>
+
+
+    {% if messages %}
+    <div class="container">
+        {% for message in messages %}
+            <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
+                <strong>Сообщение:</strong> {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+
+    <form method="POST">
+        {% csrf_token %}
+        {% include 'partial/form.html' with fields_only=True  %}
+        <button type="submit" class="ml-4 sbmt_btn" name="button_send" value="send_to_all_clients">Отправить всем клиентам</button>
+        <button type="submit" class="ml-2 sbmt_btn" name="button_send" value="send_to_active_clients">Отправить активным клиентам</button>
+    </form>
+
+
+{% endblock %}

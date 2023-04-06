@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 class="text-center fs-1 m-3 p-3">Вы действительно хотите восстановить "{{ client.telegram_name }}"?</h1>
+    <form method="POST" action="{% url 'webapp:client_restore' client.pk %}" class="text-center">
+        {% csrf_token %}
+        <button type="submit" class="sbmt_btn">Да</button>
+        <a class="sbmt_btn" href="{% url 'webapp:deleted_list' %}" role="button">Отмена</a>
+    </form>
+{% endblock %}
+

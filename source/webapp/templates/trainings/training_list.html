@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="m-2" style="text-align: center">Тренировки:</h2>
+    <div class="row">
+        {% for training in object_list %}
+             <div class="col-sm-3 my-2">
+                <div class="card">
+                  <div class="card-body" style="font-weight: bold">
+                      <div class="d-flex">
+                          <p class="сard-text">Тренировка {{ training.pk }}:  {{ training.date }}</p>
+                          <a href="{% url 'webapp:training_delete' training.pk %}"><i class="bi bi-trash3-fill m-3"></i></a>
+                      </div>
+                  </div>
+                </div>
+             </div>
+        {% empty %}
+            <p>У этого клиента нет тренировок</p>
+        {% endfor %}
+    </div>
+    {% if is_paginated %}
+    {% include 'partial/pagination.html' %}
+    {% endif %}
+{% endblock %}

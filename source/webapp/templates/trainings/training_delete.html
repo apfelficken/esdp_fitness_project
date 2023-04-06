@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 class="text-center fs-1 m-3 p-3">Вы действительно хотите удалить "{{ training }}"?</h1>
+    <form method="POST" action="{% url 'webapp:training_delete' training.pk %}" class="text-center">
+        {% csrf_token %}
+        <button type="submit" class="sbmt_btn">Да</button>
+        <a class="sbmt_btn" href="{% url 'webapp:training_list' training.client.pk%}" role="button">Отмена</a>
+    </form>
+{% endblock %}

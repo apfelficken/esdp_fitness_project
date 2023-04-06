@@ -1,0 +1,85 @@
+
+<form class="row g-3" method="get">
+  <div class="col-auto">
+    <label for="validationCustom01" class="form-label">Поиск</label>
+    {{ form.search }}
+  </div>
+  <div class="col-auto" style="padding-top: 4px">
+    {{ filter.form.as_p }}
+  </div>
+  <div class="col-auto" style="padding-bottom: 6px">
+    <input type="submit" class="sbmt_btn" value="Применить"/>
+  </div>
+</form>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th scope="col">ФИО</th>
+        <th scope="col">Группа</th>
+        <th scope="col">Telegram</th>
+        <th scope="col">Номер</th>
+        <th scope="col">Регион</th>
+        <th scope="col">Кол-во посещений</th>
+        <th scope="col">Дата окончания оплаты</th>
+        <th scope="col">Действия</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    {% for client in clients %}
+        <tr>
+            {% if not client.first_name and not client.last_name %}
+                <th><a class="text-success" href="{% url 'webapp:client_detail' client.pk %}">Новый клиент</a></th>
+            {% elif client.first_name and client.last_name %}
+                <th><a href="{% url 'webapp:client_detail' client.pk %}">{{ client.first_name }} {{ client.last_name }}</a></th>
+            {% else %}
+                <th><a href="{% url 'webapp:client_detail' client.pk %}">{{ client.first_name }}</a></th>
+            {% endif %}
+
+             {% if not client.group %}
+                <td>--</td>
+            {% else %}
+            <td><a href="{% url 'webapp:group_detail' client.group.pk %}">{{ client.group.name }}</a></td>
+            {% endif %}
+            {% if client.telegram_name %}
+                <td>{{ client.telegram_name }}</td>
+            {% else %}
+                <td>{{ client.telegram_name }}</td>
+            {% endif%}
+
+             {% if not client.phone %}
+                <td>--</td>
+             {% else %}
+                <td>{{ client.phone }}</td>
+             {% endif %}
+            {% if not client.region %}
+                <td>--</td>
+            {% else %}
+                <td>{{ client.region }}</td>
+            {% endif %}
+            <td>{{ client.visit_count }}</td>
+            {% if client.payment_end_date %}
+                {% now "Y-m-d" as todays_date %}
+                {% if todays_date > client.payment_end_date|date:"Y-m-d" %}
+                    <td class="text-danger">{{ client.payment_end_date|date:"d M Y" }}</td>
+                {% else %}
+                    <td>{{ client.payment_end_date|date:"d M Y" }}</td>
+                {% endif %}
+            {% else %}
+                <td>--</td>
+            {% endif %}
+            <td>
+                <a class="mx-3" href="{% url 'webapp:client_update' client.pk %}"><i class="bi bi-pencil"></i></a>
+                <a href="{% url 'webapp:client_delete' client.pk %}">
+                    <i class="bi bi-trash3-fill"></i>
+                </a>
+            </td>
+
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% if is_paginated %}
+    {% include 'partial/pagination.html' %}
+{% endif %}

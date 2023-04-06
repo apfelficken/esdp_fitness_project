@@ -1,0 +1,165 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
+
+
+<!-- jQuery CDN - Slim version (=without AJAX) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <!-- Popper.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{% static "css/style.css" %}">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body id="body-pd">
+
+<div class="wrapper">
+        <!-- Sidebar  -->
+        <nav id="sidebar" class="active">
+            {% block sidenav %}
+            <ul class="list-unstyled components">
+                <li>
+                    <a href="#clientSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        Клиенты
+                    </a>
+                    <ul class="collapse list-unstyled" id="clientSubmenu">
+                        <li>
+                            <a href="{% url 'webapp:index' %}">
+                                <i class="bi bi-person-lines-fill"></i>
+                                Список клиентов
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'webapp:mailing_page' %}">
+                                <i class='bi bi-envelope nav_icon'></i>
+                                Рассылка
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'webapp:client_create' %}">
+                                <i class="bi bi-plus-circle"></i>
+                                Добавить клиента
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'webapp:deleted_list' %}">
+                                <i class="bi bi-trash"></i>
+                                Удаленные клиенты
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#groupSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        Группы
+                    </a>
+                    <ul class="collapse list-unstyled" id="groupSubmenu">
+                        <li>
+                            <a href="{% url 'webapp:group_list' %}">
+                                <i class="bi bi-collection"></i>
+                                Список групп
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'webapp:group_create' %}">
+                                <i class="bi bi-plus-circle"></i>
+                                Добавить группу
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#coachSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        Тренера
+                    </a>
+                    <ul class="collapse list-unstyled" id="coachSubmenu">
+                        <li>
+                            <a href="{% url 'webapp:coach_list' %}">
+                                <i class="bi bi-person-lines-fill"></i>
+                                Список тренеров
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'webapp:coach_create' %}">
+                                <i class="bi bi-plus-circle"></i>
+                                Добавить тренера
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'webapp:coach_statistics' %}">
+                                <i class="bi bi-bar-chart"></i>
+                                Статистика тренеров
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            {% endblock %}
+        </nav>
+
+        <!-- Page Content  -->
+        <div id="content">
+
+            <nav id="topbar" class="navbar navbar-expand-lg navbar-light bg-light  d-flex align-items-center">
+                <div class="container-fluid">
+                    <button type="button" id="sidebarCollapse" class="nav_btn mr-3">
+                        <i class="bi bi-list"></i>
+                        Меню
+                    </button>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse ms-auto" id="navbarSupportedContent">
+                  <ul class="navbar-nav me-auto mb-2 mb-lg-0 w-100">
+                      <li class="nav-item">
+                          <a href="{% url 'webapp:index' %}" class="nav_btn my-2">Главная</a>
+                      </li>
+
+                  {% block topbar %}{% endblock %}{% if request.user.is_authenticated %}
+                      <li class="nav-item ml-lg-auto order-lg-2">
+                          <a class="nav_btn my-2" href="{% url 'accounts:logout' %}?next={{ request.get_full_path }}">
+                              Выйти
+                          </a>
+                      </li>
+
+                {% else %}
+                      <li class="nav-item ml-lg-auto order-lg-2">
+                          <a class="nav_btn my-2" href="{% url 'accounts:login' %}?next={% if request.GET.next %}{{ request.GET.next }}{% else %}{{ request.get_full_path }}{% endif %}">
+                              Войти
+                          </a>
+                      </li>
+
+                {% endif %}
+                  </ul>
+                </div>
+
+
+                </div>
+            </nav>
+
+            <div class="container">
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+        crossorigin="anonymous"></script>
+<script src="{% static 'js/style.js' %}"></script>
+</body>
+</html>

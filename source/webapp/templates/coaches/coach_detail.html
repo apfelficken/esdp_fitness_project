@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+   <div class="card m-5">
+        <div class="row no-gutters">
+            <div class="col-md-4">
+              {% if coach.photo %}
+                <div class="col-md-16">
+                    <img src="{{ coach.photo.url }}" class="card-img">
+                </div>
+              {% else %}
+                <div class="col-md-16">
+                    <img src="{% static "images/no_photo.jpg" %}" class="card-img">
+                </div>
+              {% endif %}
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h4 class="card-title d-flex align-items-center">
+                            Имя: {{ coach.first_name }}
+                            <p class="card-text ml-auto">
+                                <a href="{% url 'webapp:coach_update' coach.pk %}" class="cng_btn"><i class="bi bi-pencil"></i></a>
+                                <a href="{% url 'webapp:coach_delete' coach.pk %}" class="cng_btn ml-3"><i class="bi bi-trash3-fill"></i></a>
+                            </p>
+
+                    </h4>
+                    <div class="ms-auto">
+
+                    </div>
+                    {% if not client.last_name %}
+                        <p class="card-text">Фамилия: --</p>
+                    {% else %}
+                        <p class="card-text">Фамилия: {{ client.last_name }}</p>
+                    {% endif %}
+                    <p class="card-text">Группы:
+                        {% for group in groups %}
+                            <a href="{% url 'webapp:group_detail' group.id %}">{{ group.name }}</a>{% if  not forloop.last %},{% endif %}
+                        {% endfor %}
+                    </p>
+
+                    <p class="card-text">Telegram: {{ coach.telegram_name }}</p>
+                    {% if not coach.email %}
+                        <p class="card-text">Почта: --</p>
+                    {% else %}
+                        <p class="card-text">Почта: {{ coach.email }}</p>
+                    {% endif %}
+                    {% if not coach.phone %}
+                        <p class="card-text">Телефон: --</p>
+                    {% else %}
+                        <p class="card-text">Телефон: {{ coach.phone }}</p>
+                    {% endif %}
+                    {% if not coach.description %}
+                        <p class="card-text">Комментарий: --</p>
+                    {% else %}
+                        <p class="card-text">Комментарий: {{ coach.description }}</p>
+                    {% endif %}
+                     <p class="card-text">Приступил к работе: {{ coach.started_to_work|date:"d M Y" }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+
+
+
+

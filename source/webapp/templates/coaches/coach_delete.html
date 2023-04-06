@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 class="text-center fs-1 m-3 p-3">Вы действительно хотите удалить тренера {{ coach.first_name }}?</h1>
+    <form method="POST" action="{% url 'webapp:coach_delete' coach.pk %}" class="text-center">
+        {% csrf_token %}
+        <button type="submit" class="sbmt_btn">Да</button>
+        <a class="sbmt_btn" href="{% url 'webapp:coach_detail' coach.pk%}" role="button">Отмена</a>
+    </form>
+{% endblock %}
+
